@@ -131,7 +131,8 @@ public class PagoConvenioService {
 	 */
 	private String getJson(String xml) throws Exception{
 	    //Cargar template XML to JSON
-		StreamSource styleJson = new StreamSource(new File("D:\\Frank\\Javeriana\\Semestre I\\Modelado y validación de arquitectura\\workspace\\XSLTransform\\json.xsl"));
+		File file = new File("XMLJSON");
+		StreamSource styleJson = new StreamSource(new File(file.getAbsolutePath().replace("XMLJSON","")+"\\json.xsl"));
 		TransformerFactory factory = TransformerFactory.newInstance();
 	    Transformer transformer = factory.newTransformer(styleJson);
 	    StringWriter writer = new StringWriter();
