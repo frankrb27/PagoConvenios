@@ -59,4 +59,9 @@ public class Factura {
 	public void setValorFactura(double valorFactura) {
 		this.valorFactura = valorFactura;
 	}
+	
+	
+	public String toString(){
+		return "idFactura: "+idFactura+","+"valorFactura: "+valorFactura;
+	}
 }
