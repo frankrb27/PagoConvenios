@@ -9,6 +9,7 @@ public class Convenio {
 	private String templatePago;
 	private String urlCompensacion;
 	private String templateCompensacion;
+	private boolean isREST;
 	
     /**
      * Constructor
@@ -18,11 +19,15 @@ public class Convenio {
     /**
      * Constructor
      * @param idConvenio
+     * @param urlConsulta
      * @param templateConsulta
+     * @param urlPago
      * @param templatePago
+     * @param urlCompensacion
      * @param templateCompensacion
+     * @param isREST
      */
-    public Convenio(String idConvenio, String urlConsulta, String templateConsulta, String urlPago, String templatePago, String urlCompensacion, String templateCompensacion) {
+    public Convenio(String idConvenio, String urlConsulta, String templateConsulta, String urlPago, String templatePago, String urlCompensacion, String templateCompensacion, boolean isREST) {
         this.idConvenio = idConvenio;
         this.urlConsulta = urlConsulta;
         this.templateConsulta = templateConsulta;
@@ -30,6 +35,7 @@ public class Convenio {
         this.templatePago = templatePago;
         this.urlCompensacion = urlCompensacion;
         this.templateCompensacion = templateCompensacion;
+        this.isREST = isREST;
     }
 
 	/**
@@ -128,5 +134,20 @@ public class Convenio {
 	 */
 	public void setTemplateCompensacion(String templateCompensacion) {
 		this.templateCompensacion = templateCompensacion;
-	}	
+	}
+
+	/**
+	 * @return the isREST
+	 */
+	public boolean isREST() {
+		return isREST;
+	}
+
+	/**
+	 * @param isREST the isREST to set
+	 */
+	public void setREST(boolean isREST) {
+		this.isREST = isREST;
+	}
+	
 }
