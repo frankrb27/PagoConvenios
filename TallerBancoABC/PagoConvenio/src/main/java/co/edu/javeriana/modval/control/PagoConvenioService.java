@@ -2,8 +2,8 @@ package co.edu.javeriana.modval.control;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Arrays;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -13,10 +13,13 @@ import javax.xml.transform.stream.StreamSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.ws.WebServiceMessage;
+import org.springframework.ws.client.core.WebServiceMessageCallback;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.ws.soap.client.core.SoapActionCallback;
 
 import com.google.gson.Gson;
 
@@ -30,22 +33,35 @@ public class PagoConvenioService {
 	public Convenio getConvenio(String idFactura){
 		if(idFactura.equals("10000")){
 		return new Convenio(
-				"1000",
+				"10000",
 				"http://localhost:8080/servicios/pagos/v1/payments/",
 				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"factura\"><factura><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><valorFactura><xsl:value-of select=\"valorFactura\"/></valorFactura></factura></xsl:template></xsl:stylesheet>",
 				"http://localhost:8080/servicios/pagos/v1/payments/10000?idFactura=",
 				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
 				"http://localhost:8080/servicios/pagos/v1/payments/10000?idFactura=",
-				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>");
+				"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
+				true);
 		}else if(idFactura.equals("20000")){
 			return new Convenio(
-					"1000",
+					"20000",
 					"http://localhost:8080/servicios/pagos/v1/payments/",
 					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"factura\"><factura><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><valorFactura><xsl:value-of select=\"valorFactura\"/></valorFactura></factura></xsl:template></xsl:stylesheet>",
 					"http://localhost:8080/servicios/pagos/v1/payments/10000?idFactura=",
 					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
 					"http://localhost:8080/servicios/pagos/v1/payments/10000?idFactura=",
-					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>");
+					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
+					true);
+			
+		}else if(idFactura.equals("30000")){
+			return new Convenio(
+					"30000",
+					"http://localhost:7070/w1-soap-svr/PagosServiceService",
+					"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><xsl:stylesheet xmlns:xsl=\\\"http://www.w3.org/1999/XSL/Transform\\\" version=\\\"1.0\\\" xmlns:S=\\\"http://schemas.xmlsoap.org/soap/envelope/\\\"  xmlns:A=\\\"http://www.servicios.co/pagos/schemas\\\"><xsl:output method=\\\"xml\\\" omit-xml-declaration=\\\"no\\\" encoding=\\\"utf-8\\\" indent=\\\"yes\\\" /><xsl:template match=\\\"/\\\"><factura><idFactura><xsl:value-of select=\\\"S:Envelope/S:Body/A:ResultadoConsulta/A:referenciaFactura/A:referenciaFactura\\\" /></idFactura><valorFactura><xsl:value-of select=\\\"S:Envelope/S:Body/A:ResultadoConsulta/A:totalPagar\\\" /></valorFactura></factura></xsl:template></xsl:stylesheet>",
+					"http://localhost:7070/w1-soap-svr/PagosServiceService",
+					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
+					"http://localhost:7070/w1-soap-svr/PagosServiceService",
+					"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"><xsl:template match=\"resultado\"><respuesta><idFactura><xsl:value-of select=\"idFactura\"/></idFactura><mensaje><xsl:value-of select=\"mensaje\"/></mensaje></respuesta></xsl:template></xsl:stylesheet>",
+					false);
 			
 		}else{
 			return new Convenio();
@@ -59,16 +75,33 @@ public class PagoConvenioService {
 	 * @return
 	 */
 	public String invokeRest(String url, HttpMethod httpMethod){
-		// Set XML content type explicitly to force response in XML (If not spring gets response in JSON)
 		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.set("Accept", "application/xml");
+		headers.set("x-application-context", "application/xml");
+		headers.set("Content-type", "application/xml");
 		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		RestTemplate restTemplate = new RestTemplate();
 		System.out.println("URL: "+url);
 		ResponseEntity<String> response = restTemplate.exchange(url, httpMethod, entity, String.class);
 		return response.getBody();
 	}
+	
+	/**
+	 * Invocar servicio SOAP
+	 * @param url
+	 * @return
+	 */
+	public String invokeSoap(String url){
+		String mensaje = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:sch=\"http://www.servicios.co/pagos/schemas\"><soapenv:Header/><soapenv:Body><sch:ReferenciaFactura><sch:referenciaFactura>123</sch:referenciaFactura></sch:ReferenciaFactura></soapenv:Body></soapenv:Envelope>";
+		WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+		WebServiceMessageCallback messageCallback = new SoapActionCallback("consultar");
+		StreamSource source = new StreamSource(new StringReader(mensaje));
+        StreamResult result = new StreamResult(System.out);
+        System.out.println("URL: "+url);
+        webServiceTemplate.setDefaultUri(url);
+        webServiceTemplate.sendSourceAndReceiveToResult(source, messageCallback, result);
+		return result.toString();
+	}	
 	
 	/**
 	 * Obtener objeto Factura
