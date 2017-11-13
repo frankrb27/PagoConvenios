@@ -20,26 +20,41 @@ public class PagoConvenio {
 	@Autowired
 	private PagoConvenioService pagoConvenioService;
 
-	@RequestMapping(path = "pagos/{idFactura}", method = RequestMethod.GET,
+	@RequestMapping(path = "pagos/test/{idFactura}", method = RequestMethod.GET,
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public Factura consultarFactura(@PathVariable("idFactura") String idFactura) {
+	public String test(@PathVariable("idFactura") String idFactura) throws Exception{
+		return "TEST";
+	}	
+
+	@RequestMapping(path = "pagos/{idFactura}", method = RequestMethod.GET,
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public Factura consultarFactura(@PathVariable("idFactura") String idFactura) throws Exception{
+		Convenio convenio = null;
 		try{
 			//Consultar convenio
-			Convenio convenio = pagoConvenioService.getConvenio(idFactura);
+			convenio = pagoConvenioService.getConvenio(idFactura);
+			String responseXML = null;
 			if(convenio!=null && convenio.getUrlConsulta()!=null){
-				//Invocar servicio
-				String responseXML = pagoConvenioService.invokeRest(convenio.getUrlConsulta().concat(idFactura), HttpMethod.GET);
+				if(convenio.isREST()) {
+					//Invocar servicio
+					responseXML = pagoConvenioService.invokeRest(convenio.getUrlConsulta().concat(idFactura), HttpMethod.GET);
+				}else {
+					responseXML = pagoConvenioService.invokeSoap(convenio.getUrlConsulta());
+				}
 				return pagoConvenioService.getFactura(responseXML,convenio.getTemplateConsulta());
 			}else{
-				return null;
+				return new Factura("0",0.0);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
-			return null;
+			throw new Exception(e);
 		}
 	}
-	
+
 	@RequestMapping(path = "pagos/{idFactura}", method = RequestMethod.POST,
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Respuesta pagarFactura(@PathVariable("idFactura") String idFactura) {
 		try{
@@ -57,8 +72,9 @@ public class PagoConvenio {
 			return null;
 		}
 	}	
-	
+
 	@RequestMapping(path = "pagos/{idFactura}", method = RequestMethod.DELETE,
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
 			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public Respuesta compensarFactura(@PathVariable("idFactura") String idFactura) {
 		try{
